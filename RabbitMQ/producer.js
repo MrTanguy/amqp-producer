@@ -4,6 +4,7 @@ const amqp = require('amqplib');
 const amqpHost = process.env.AMQP_HOST || 'amqp://host.docker.internal';
 const exchangeName = 'logExchange';
 const routingKey = 'info';
+const queueName = 'logQueue';
 
 class Producer {
   constructor() {
@@ -13,6 +14,11 @@ class Producer {
   async createChannel() {
     const connection = await amqp.connect(amqpHost);
     this.channel = await connection.createChannel();
+
+    await this.channel.assertExchange(exchangeName, 'direct', { durable: false });
+
+    await this.channel.assertQueue(queueName, { durable: false });
+    await this.channel.bindQueue(queueName, exchangeName, routingKey);
   }
 
   async publishMessage(message) {
