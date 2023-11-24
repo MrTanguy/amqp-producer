@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 
 // Configuration AMQP
-const amqpHost = process.env.AMQP_HOST || 'amqp://host.docker.internal';
+const amqpHost = process.env.AMQP_HOST || 'amqp://rabbitmq';
 const exchangeName = 'logExchange';
 const routingKey = 'info';
 const queueName = 'logQueue';
